@@ -6,28 +6,22 @@
  */
 
 #include <iostream>
-#include <stdio.h>
 #include "intSLList.h"
 
 using namespace std;
 
 int main()
 {
-	IntSLList list;
+	SLList list;
+
+	cout << "inserindo o numero 3 na lista." << endl;
 	list.pushFront(3); // 3
-	//list->printList();
-	list.pushFront(2); // 23
+	cout << "imprimido a lista pela primeira vez;" << endl;
+	list.printList();
+	cout << "inserindo o 2 e o 1 pelo push front e logo após imprimindo a lista" << endl;
+	list.pushFront(2);
 	list.pushFront(1);
-	list.printList(); // 123
 	list.printList();
-	list.pushFront(0);
-	list.printList();
-	list.printList();
-
-
-
-	cout << "\n\nPressione Qualquer tecla para sair...";
-	getchar();
 	return 0;
 }
 

@@ -2,27 +2,29 @@
 #ifndef INT_LINKED_LIST
 #define INT_LINKED_LIST
 
-class IntSLList
+class SLList
 {
-public:
-	struct IntNode
+protected:
+	struct Node
 	{
 		int data;
-		IntNode * next;
+		Node * next;
+
+		Node(int _x, Node * ptr = NULL)
+		{
+			data = _x;
+			next = ptr;
+		}
 	};
+public:
+	
 
-	IntSLList()
+	SLList() : head( NULL )
 	{
-		head = NULL;
-		tail = NULL;
+		/* Empty */
 	}
 
-	~IntSLList();
-
-	int isEmpty()
-	{
-		return head == 0;
-	}
+	~SLList();
 
 	void pushFront(int _x);
 	void pushBack(int _x);
@@ -31,10 +33,11 @@ public:
 	void deleteNode(int _x);
 	bool isInList(int _x) const;
 	void printList();
+	bool isEmpty();
+	void clear();
 
 private:
-	IntNode * head;
-	IntNode * tail;
+	Node * head;
 };
 
 #endif
