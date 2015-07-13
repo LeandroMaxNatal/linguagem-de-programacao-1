@@ -1,9 +1,10 @@
 #include "game.h"
 
 Game::Game()
-: mWindow(sf::VideoMode(640,480), "Meu primeiro Jogo")
-, mPlayer(), mIsMovingUp(false), mIsMovingDown(false)
-, mIsMovingLeft(false), mIsMovingRight(false)
+: mWindow( sf::VideoMode( 640, 480 ), "Meu primeiro Jogo" )
+, mPlayer(), mIsMovingUp( false ), mIsMovingDown( false )
+, mIsMovingLeft( false ), mIsMovingRight( false ) , PlayerSpeed( 100.f )
+, TimePerFrame( sf::seconds( 1.f / 60.f ) )
 {
 	mPlayer.setRadius(40.f);
 	mPlayer.setPosition(100.f, 100.f);
@@ -13,10 +14,21 @@ Game::Game()
 
 void Game::run()
 {
+	// Cria um objeto relogio
+	sf::Clock clock;
+	// Cria um objeto time o o seta como zero.
+	sf::Time timeSinceLastUpdate = sf::Time::Zero;
+
 	while( mWindow.isOpen())
 	{
 		processEvents();
-		update();
+		timeSinceLastUpdate += clock.restart();
+		while( timeSinceLastUpdate > TimePerFrame )
+		{
+			timeSinceLastUpdate -= TimePerFrame;
+			processEvents();
+			update( TimePerFrame );
+		}
 		render();
 	}
 }
@@ -43,20 +55,22 @@ void Game::processEvents()
 }
 
 
-void Game::update()
+void Game::update( sf::Time deltaTime )
 {
 	sf::Vector2f movement(0.f, 0.f);
 
+	// Atualiza a direção que o jogador quer se mover
 	if ( mIsMovingUp )
-		movement.y -= 1.f;
+		movement.y -= PlayerSpeed;
 	if ( mIsMovingDown )
-		movement.y += 1.f;
+		movement.y += PlayerSpeed;
 	if ( mIsMovingLeft )
-		movement.x -= 1.f;
+		movement.x -= PlayerSpeed;
 	if ( mIsMovingRight )
-		movement.x += 1.f;
+		movement.x += PlayerSpeed;
 
-	mPlayer.move( movement );
+	// Move o jogador de acordo com o valor atualizado em movement
+	mPlayer.move( movement * deltaTime.asSeconds() );
 }
 
 
