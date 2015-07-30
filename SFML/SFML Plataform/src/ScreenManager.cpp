@@ -1,39 +1,115 @@
+/********************************************//**
+* \ScreenManager.hpp
+* \Implements ScreenManager class functions
+***********************************************/
 #include "ScreenManager.h"
 
+GameScreen *currentScreen, *newScreen;
 
-
-ScreenManager & ScreenManager::GetInstance()
+/********************************************//**
+* \instance generator
+***********************************************/
+ScreenManager &ScreenManager::GetInstance()
 {
-    static ScreenManager instance;
-    return instance;
+	static ScreenManager instance;
+	return instance;
 }
 
-ScreenManager::ScreenManager()
-{
-    //ctor
-}
-
+/********************************************//**
+* \class destructor
+***********************************************/
 ScreenManager::~ScreenManager()
+{ }
+
+/********************************************//**
+* \generate new screen instance
+***********************************************/
+void ScreenManager::Initialize()
 {
-    //dtor
+	currentScreen = new SplashScreen();
+	transition = false;
+
+	//file.LoadContent("assets/settings/test.hell", attributes, contents);
 }
 
-void ScreenManager::initialize()
-{
-    currentScreen = new SplashScreen();
-}
-
+/********************************************//**
+* \screen's content loader
+***********************************************/
 void ScreenManager::LoadContent()
 {
-    currentScreen->LoadContent();
+	currentScreen->LoadContent();
+
+	sf::Texture image;
+	sf::Vector2f pos;
+	fade.LoadContent("", image, pos);
+	fade.SetAlpha(0.0f);
 }
 
-void ScreenManager::Update()
+/********************************************//**
+* \screen's content unloader
+***********************************************/
+void ScreenManager::Update( sf::RenderWindow &Window, sf::Event event )
 {
-    currentScreen->Update();
+	if ( !transition )
+		currentScreen->Update(Window, event);
+	Transition(Window);
 }
 
-void ScreenManager::Draw(sf::RenderWindow &Window)
+/********************************************//**
+* \print the content on screen
+***********************************************/
+void ScreenManager::Draw( sf::RenderWindow &Window )
 {
-    currentScreen->Draw(Window);
+	currentScreen->Draw(Window);
+}
+
+/********************************************//**
+* \add a new screen
+***********************************************/
+void ScreenManager::AddScreen( GameScreen *screen )
+{
+	// Set transition state as true
+	transition = true;
+
+	// Pass the pointer to the attribute
+	newScreen = screen;
+
+	// Activate fade transition effect
+	fade.SetValue(fade.GetActive(), true);
+
+	// Define the fade transition value
+	fade.SetAlpha(0.0f);
+}
+
+/********************************************//**
+* \handle screen transition
+***********************************************/
+void ScreenManager::Transition( sf::RenderWindow &Window )
+{
+	if ( transition )
+	{
+		fade.Update(Window);
+
+		if ( fade.GetAlpha() >= 1.0f )
+		{
+			currentScreen->UnloadContent();
+			delete currentScreen;
+			currentScreen = newScreen;
+			currentScreen->LoadContent();
+			newScreen = NULL;
+		}
+		else if ( fade.GetAlpha() <= 0.0f )
+		{
+			transition = false;
+			fade.SetValue(fade.GetActive(), false);
+		}
+	}
+}
+
+/********************************************//**
+* \get animation alpha value
+***********************************************/
+float ScreenManager::GetAlpha()
+{
+	return fade.GetAlpha();
 }

@@ -1,31 +1,50 @@
 #include "GameScreen.h"
 
+/********************************************//**
+* \class constructor
+***********************************************/
 GameScreen::GameScreen()
 {
-    //ctor
+	/* Empty */
 }
 
+/********************************************//**
+* \class destructor
+***********************************************/
 GameScreen::~GameScreen()
 {
-    //dtor
+	/* Empty */
 }
 
+/********************************************//**
+* \load content on screen
+***********************************************/
 void GameScreen::LoadContent()
 {
-    /* Empty */
+
 }
 
+/********************************************//**
+* \unload screen's content
+***********************************************/
 void GameScreen::UnloadContent()
 {
-    /* Empty */
+	keys.clear();
+	//input = NULL;
 }
 
-void GameScreen::Update()
+/********************************************//**
+* \update screen content
+***********************************************/
+void GameScreen::Update( sf::RenderWindow &Window, sf::Event event )
 {
-    /* Empty */
+
 }
 
-void GameScreen::Draw(sf::RenderWindow &Window)
+/********************************************//**
+* \print the screen content
+***********************************************/
+void GameScreen::Draw( sf::RenderWindow &Window )
 {
-    /* Empty */
+
 }

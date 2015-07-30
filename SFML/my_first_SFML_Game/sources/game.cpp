@@ -1,14 +1,44 @@
 #include "game.h"
 
 Game::Game()
-: mWindow( sf::VideoMode( 640, 480 ), "Meu primeiro Jogo" )
-, mPlayer(), mIsMovingUp( false ), mIsMovingDown( false )
-, mIsMovingLeft( false ), mIsMovingRight( false ) , PlayerSpeed( 100.f )
-, TimePerFrame( sf::seconds( 1.f / 60.f ) )
+: mWindow( sf::VideoMode( 640, 480 ), "Meu primeiro Jogo", sf::Style::Close )
+//, mTexture()
+//, mPlayer()
+, mIsMovingUp( false )
+, mIsMovingDown( false )
+, mIsMovingLeft( false )
+, mIsMovingRight( false )
+, PlayerSpeed ( 100.f )
+, TimePerFrame ( sf::seconds( 1.f / 60.f ) )
+, textures ();
+, landscape ();
+, airplane ();
 {
-	mPlayer.setRadius(40.f);
-	mPlayer.setPosition(100.f, 100.f);
-	mPlayer.setFillColor(sf::Color::Cyan);
+	/*
+	if ( !mTexture.loadFromFile( "assets/images/nave.png" ) )
+	{
+		std::cout << "Erro ao abrir textura" << std::endl;
+	}
+	mPlayer.setTexture( mTexture );
+	mPlayer.setPosition( 100.f, 100.f );
+	*/
+
+	/ Try to load resources
+	try
+	{
+		textures.load(Textures::Landscape, "assets/Textures/Desert.png");
+		textures.load(Textures::Airplane, "assets/Textures/Eagle.png");
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << "Exception: " << e.what() << std::endl;
+		return 1;
+	}
+
+	landscape(textures.get(Textures::Landscape));
+	airplane(textures.get(Textures::Airplane));
+
+	airplane.setPosition(200.f, 200.f);
 }
 
 
@@ -70,14 +100,15 @@ void Game::update( sf::Time deltaTime )
 		movement.x += PlayerSpeed;
 
 	// Move o jogador de acordo com o valor atualizado em movement
-	mPlayer.move( movement * deltaTime.asSeconds() );
+	airplane.move( movement * deltaTime.asSeconds() );
 }
 
 
 void Game::render()
 {
 	mWindow.clear();
-	mWindow.draw(mPlayer);
+	mWindow.draw(landscape);
+	mWindow.draw(airplane);
 	mWindow.display();
 }
 

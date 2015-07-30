@@ -10,3 +10,8 @@
 *.exe
 *.out
 *.app
+*.o
+*.depend
+*.cbp
+
+/SFML/SFML Plataform/bin/*
