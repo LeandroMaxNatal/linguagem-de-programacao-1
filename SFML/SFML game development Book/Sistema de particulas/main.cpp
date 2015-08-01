@@ -8,7 +8,7 @@ int main()
     sf::RenderWindow window(sf::VideoMode(512, 256), "Particles");
 
     // create the particle system
-    ParticleSystem particles(100);
+    ParticleSystem particles(10000);
 
     // create a clock to track the elapsed time
     sf::Clock clock;
